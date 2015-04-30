@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Products Page";
+}
+
+<h2><span class="label label-info">Books</span></h2>
+    <div class="col-md-4 row">
+        <div style="margin: 10px 0;">
+            <button id="loadBooks" class="btn btn-info">Load book info</button>
+        </div> 
+        <div style="margin: 14px 0;">
+            <textarea id="isbns-textbox" cols="40" rows="40"></textarea>
+        </div> 
+    </div>
+<div class="col-md-8">
+    <div style="margin: 24px 0 5px; align-content:center">
+        <span class="label label-warning">Items per page:</span>
+        <select id="pageSizeSelect" class="btn btn-default btn-sm dropdown-toggle">
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+        </select>
+    </div>
+    <div id="book-list">
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" lang="javascript">
+
+        function getProducts(page, pageItemsCount, isbns) {
+            $.ajax({
+                url: '@Url.Action("BookList")',
+                data: {
+                    "currentPage": page,
+                    "pageItemsCount": pageItemsCount,
+                    "isbns" : isbns
+                },
+                success: function(data) {
+                    $("#book-list").html(data);
+                }
+            });
+        };
+
+        function getPageSize() {
+            return $('#pageSizeSelect').val() || 5;
+        }
+
+        function getISBN() {
+            debugger;
+            return $('#isbns-textbox').val();
+            @*$.ajax({
+                url: '@Url.Action("LoadBooksInfo")',
+                data: {
+                    "isbns": isbns
+                },
+                success: function (data) {
+                    debugger;
+                    $("#book-list").html(data);
+                }
+            });*@
+        }
+        $(document).ready(function () {
+            var defaultPage = 1;
+
+            getProducts(defaultPage, getPageSize(), getISBN());
+
+            $('#pageSizeSelect').on('change', function () {
+                getProducts(defaultPage, getPageSize(), getISBN());
+            });
+
+            $('#loadBooks').on('click', function () {
+                debugger;
+                getProducts(defaultPage, getPageSize(), getISBN());
+            });
+
+            $('#book-list').on('click', '.page-number', function() {
+                var page = $(this).val();
+                getProducts(page, getPageSize(), getISBN());
+            });
+        });
+    </script>
+
+}
