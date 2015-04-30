@@ -1,0 +1,16 @@
+﻿@using ConscensiaBooks.Helpers
+@model ConscensiaBooks.Models.PagedData<ConscensiaBooks.Models.Book>
+
+<div style="float:right; display: block;">
+@foreach(var item in Model.Data){
+    <div style="float: left; width: 200px; height: 300px">
+        <div style="width: 200px; height: 200px;"><img id="img1" src="@item.URL" height=200 width="100" /></div>
+        <div style="width: 150px;">
+            @Html.DisplayFor(modelItem => item.Title)
+            </div>
+        </div>
+}
+    </div>
+<div class="pagination-centered pager-list" style="float: left;">
+    @Html.PagerListing(Model.CurrentPage, Model.PageSize, Model.TotalItemsCount)
+</div>
